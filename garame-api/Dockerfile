@@ -74,7 +74,10 @@ RUN if [ "$APP_ENV" = "dev" ] || [ "$APP_DEBUG" = "1" ]; then \
 COPY docker/php/opcache.ini "$PHP_INI_DIR/conf.d/99-opcache.ini"
 COPY docker/Caddyfile /etc/caddy/Caddyfile
 COPY docker/entrypoint.sh /usr/local/bin/app-entrypoint
-RUN chmod +x /usr/local/bin/app-entrypoint
+# A Windows checkout may copy the shell script with CRLF endings. Remove the
+# carriage returns inside the Linux image before using it as an entrypoint.
+RUN sed -i 's/\r$//' /usr/local/bin/app-entrypoint \
+    && chmod +x /usr/local/bin/app-entrypoint
 
 COPY --from=builder /app /app
 

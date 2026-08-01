@@ -4,12 +4,14 @@ import { Button } from "../components/Button";
 import { motion } from "motion/react";
 import {
   ArrowLeft,
+  BookOpen,
   Clock,
   Coins,
   Lock,
   RefreshCw,
   ShieldCheck,
   Trophy,
+  UserRoundSearch,
   Users,
   Zap,
 } from "lucide-react";
@@ -199,8 +201,8 @@ export function Lobby() {
               <ArrowLeft className="w-5 h-5 text-white" />
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-white">Lobby</h1>
-              <p className="text-sm text-slate-400">Tables, matchmaking et mises indicatives</p>
+              <h1 className="app-logo text-2xl">GARAME</h1>
+              <p className="text-sm text-slate-400">Salon de jeu · matchmaking compétitif</p>
             </div>
           </div>
           <div className="flex items-center gap-2 rounded-lg border border-violet-400/25 bg-white/[0.04] px-4 py-2">
@@ -224,17 +226,19 @@ export function Lobby() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="app-card mb-8 overflow-hidden"
+              className="app-gold-frame relative mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#17121c] via-[#0e0e10] to-[#080809]"
             >
+              <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-violet-600/14 blur-3xl" />
+              <div className="pointer-events-none absolute right-8 top-5 select-none text-8xl text-white/[0.018]">♦</div>
               <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-                <div className="p-6 sm:p-8">
+                <div className="relative p-6 sm:p-8 lg:p-10">
                   <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-violet-400/35 bg-violet-500/10 px-4 py-2 text-violet-200">
                     <Zap className="w-4 h-4" />
                     <span className="font-semibold">Match rapide</span>
                   </div>
-                  <h2 className="mb-2 text-3xl font-black text-white">Jouer maintenant</h2>
+                  <h2 className="mb-2 text-4xl font-black text-white">Jouer maintenant</h2>
                   <p className="max-w-2xl text-slate-400">
-                    Choisissez une mise indicative, verifiez le gain potentiel, puis lancez la recherche d'un adversaire.
+                    Choisissez votre table, vérifiez le gain potentiel puis trouvez un adversaire de votre niveau.
                   </p>
 
                   <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -251,10 +255,10 @@ export function Lobby() {
                             setSelectedStake(stake);
                             setNeedsStakeConfirmation(false);
                           }}
-                          className={`rounded-xl border p-4 text-left transition-all ${
+                          className={`relative overflow-hidden rounded-2xl border p-4 text-left transition-all ${
                             selectedStake === stake
-                              ? "border-violet-400 bg-violet-500/15 shadow-lg shadow-violet-950/30"
-                              : "border-white/10 bg-black/25 hover:border-violet-300/40"
+                              ? "border-violet-300 bg-gradient-to-br from-violet-500/25 to-violet-950/25 shadow-[0_14px_38px_rgba(76,29,149,0.35)]"
+                              : "border-white/10 bg-black/35 hover:border-violet-300/40 hover:bg-white/[0.035]"
                           }`}
                         >
                           <div className="flex items-center justify-between gap-2">
@@ -264,7 +268,7 @@ export function Lobby() {
                             )}
                           </div>
                           <div className="mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                            credits
+                            crédits
                           </div>
                           <div className="mt-3 rounded-md border border-white/10 bg-black/30 px-2 py-1 text-xs text-yellow-200">
                             Gain estim. {gain}
@@ -284,21 +288,21 @@ export function Lobby() {
                     </div>
                   )}
 
-                  <Button variant="app" size="lg" className="mt-7 w-full" onClick={handleQuickMatch}>
+                  <Button variant="app" size="lg" className="mt-7 w-full rounded-2xl py-5 text-lg shadow-[0_18px_45px_rgba(91,33,182,0.4)]" onClick={handleQuickMatch}>
                     <Zap className="w-5 h-5 mr-2 inline" />
                     {needsStakeConfirmation ? "Confirmer et jouer" : "Jouer maintenant"}
                   </Button>
                 </div>
 
-                <div className="border-t border-white/10 bg-black/25 p-6 sm:p-8 lg:border-l lg:border-t-0">
-                  <div className="mb-4 text-sm font-bold uppercase tracking-wide text-slate-400">
-                    Resume de la table
+                <div className="relative border-t border-white/10 bg-black/35 p-6 sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
+                  <div className="app-eyebrow mb-4">
+                    Résumé de la table
                   </div>
                   <div className="space-y-3">
-                    <EconomyRow icon={<Coins className="h-4 w-4" />} label="Votre solde" value={`${user?.credits ?? 0} credits`} />
-                    <EconomyRow icon={<Lock className="h-4 w-4" />} label="Mise" value={`${selectedStake} credits`} />
-                    <EconomyRow icon={<ShieldCheck className="h-4 w-4" />} label="Frais estimes" value={`${estimatedFee} credits`} />
-                    <EconomyRow icon={<Trophy className="h-4 w-4" />} label="Gain potentiel" value={`${estimatedGain} credits`} accent />
+                    <EconomyRow icon={<Coins className="h-4 w-4" />} label="Votre solde" value={`${user?.credits ?? 0} crédits`} />
+                    <EconomyRow icon={<Lock className="h-4 w-4" />} label="Mise" value={`${selectedStake} crédits`} />
+                    <EconomyRow icon={<ShieldCheck className="h-4 w-4" />} label="Frais estimés" value={`${estimatedFee} crédits`} />
+                    <EconomyRow icon={<Trophy className="h-4 w-4" />} label="Gain potentiel" value={`${estimatedGain} crédits`} accent />
                   </div>
                   <div className="mt-5 rounded-lg border border-white/10 bg-[#151515] p-3 text-xs leading-relaxed text-neutral-400">
                     Les montants sont indicatifs tant que le backend wallet n'a pas de contrat de mise reel dedie.
@@ -311,7 +315,7 @@ export function Lobby() {
               </div>
             </motion.div>
 
-            <div className="app-card p-8">
+            <div className="app-gold-frame rounded-3xl bg-gradient-to-br from-[#141216] to-[#09090a] p-6 sm:p-8">
               <div className="flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <h3 className="text-2xl font-bold text-white mb-1">Tables ouvertes</h3>
@@ -326,7 +330,7 @@ export function Lobby() {
                   </Button>
                   <Button variant="appOutline" onClick={handleCreateGame} disabled={isCreating}>
                     <Lock className="w-4 h-4 mr-2 inline" />
-                    {isCreating ? "Creation..." : "Creer"}
+                    {isCreating ? "Création…" : "Créer"}
                   </Button>
                 </div>
               </div>
@@ -359,6 +363,7 @@ export function Lobby() {
             stake={selectedStake}
             estimatedGain={estimatedGain}
             queuedGame={queuedGame}
+            playerName={user?.username ?? "Vous"}
             onCancel={handleCancelSearch}
           />
         )}
@@ -455,66 +460,135 @@ function MatchmakingScreen({
   stake,
   estimatedGain,
   queuedGame,
+  playerName,
   onCancel,
 }: {
   stake: number;
   estimatedGain: number;
   queuedGame: GameSummary | null;
+  playerName: string;
   onCancel: () => void;
 }) {
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [showRules, setShowRules] = useState(false);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => setElapsedSeconds((seconds) => seconds + 1), 1000);
+    return () => window.clearInterval(intervalId);
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="rounded-2xl border border-white/10 bg-[#151515]/88 p-8 text-center shadow-2xl shadow-black/30 backdrop-blur sm:p-12"
+      className="app-gold-frame relative overflow-hidden rounded-[2rem] bg-[#09090a]/94 p-4 shadow-2xl shadow-black/50 backdrop-blur sm:p-8"
     >
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-        className="w-20 h-20 border-4 border-violet-500 border-t-transparent rounded-full mx-auto mb-6"
-      />
-      <h2 className="text-3xl font-bold text-white mb-2">Recherche d'adversaire...</h2>
-      <p className="text-slate-400 mb-6">
-        Mise indicative {stake} credits - gain potentiel {estimatedGain} credits
-      </p>
-      {queuedGame && (
-        <p className="mx-auto mb-6 w-fit rounded-full border border-white/10 bg-black/30 px-3 py-1 text-sm text-slate-400">
-          Table {queuedGame.id.slice(0, 8)}
-        </p>
-      )}
-      <div className="mx-auto mb-8 grid max-w-md gap-2 text-left text-sm">
-        <MatchmakingStep active label="Recherche d'une table compatible" />
-        <MatchmakingStep active={Boolean(queuedGame)} label="Table reservee" />
-        <MatchmakingStep active={false} label="Demarrage automatique de la partie" />
+      <div className="absolute left-1/2 top-32 h-80 w-80 -translate-x-1/2 rounded-full bg-violet-600/15 blur-3xl" />
+      <div className="app-felt-surface absolute inset-x-4 bottom-4 top-44 rounded-[45%_45%_2rem_2rem/28%_28%_2rem_2rem] border border-[#d6b66f]/25 opacity-80 sm:inset-x-8" />
+
+      <div className="relative text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/25 bg-violet-500/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-violet-200">
+          <UserRoundSearch className="h-4 w-4" /> Matchmaking en cours
+        </div>
+        <h2 className="mt-4 text-3xl font-black text-white sm:text-4xl">Recherche d'un adversaire</h2>
+        <p className="mt-2 text-sm text-neutral-400">Nous cherchons un joueur proche de votre niveau.</p>
+
+        <div className="mx-auto mt-8 grid max-w-4xl grid-cols-[1fr_auto_1fr] items-center gap-3 px-2 py-8 sm:gap-10">
+          <PlayerSearchCard name={playerName} known />
+          <div className="relative flex h-20 w-20 items-center justify-center sm:h-32 sm:w-32">
+            {[1, 0.72, 0.46].map((scale, index) => (
+              <motion.div
+                key={scale}
+                animate={{ scale: [scale, scale + 0.12, scale], opacity: [0.3, 0.8, 0.3] }}
+                transition={{ duration: 2.4, repeat: Infinity, delay: index * 0.25 }}
+                className="absolute inset-0 rounded-full border border-violet-400/45"
+              />
+            ))}
+            <span className="relative text-xl font-black text-yellow-200 sm:text-2xl">VS</span>
+          </div>
+          <PlayerSearchCard name="Recherche…" known={false} />
+        </div>
+
+        <div className="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-3">
+          <SearchInfo icon={<Clock className="h-4 w-4" />} label="Temps écoulé" value={formatElapsed(elapsedSeconds)} />
+          <SearchInfo icon={<Coins className="h-4 w-4" />} label="Mise indicative" value={`${stake} crédits`} accent />
+          <SearchInfo icon={<ShieldCheck className="h-4 w-4" />} label="Recherche" value="Votre niveau" />
+        </div>
+
+        <div className="mx-auto mt-4 max-w-3xl rounded-xl border border-white/10 bg-black/30 p-4 text-left">
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 h-2.5 w-2.5 shrink-0 animate-pulse rounded-full bg-violet-400 shadow-lg shadow-violet-400/50" />
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-semibold text-white">Recherche dans votre niveau</span>
+                <span className="text-xs text-neutral-500">Estimation indicative : moins de 30 s</span>
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-neutral-400">
+                La plage de recherche pourra s'élargir progressivement pour éviter une attente trop longue.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {queuedGame && (
+          <p className="mx-auto mt-3 w-fit text-xs text-neutral-600">
+            Table sécurisée {queuedGame.id.slice(0, 8)} · démarrage automatique dès qu'un adversaire rejoint
+          </p>
+        )}
+
+        <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-violet-300/15 bg-violet-500/5 text-left">
+          <button
+            type="button"
+            onClick={() => setShowRules((open) => !open)}
+            className="flex w-full items-center justify-between gap-4 px-4 py-3 text-sm font-semibold text-violet-100"
+            aria-expanded={showRules}
+          >
+            <span className="flex items-center gap-2"><BookOpen className="h-4 w-4" /> Revoir les règles pendant l'attente</span>
+            <span className="text-xs text-violet-300">{showRules ? "Masquer" : "Afficher"}</span>
+          </button>
+          {showRules && (
+            <div className="grid gap-2 border-t border-white/10 px-4 py-4 text-xs text-neutral-300 sm:grid-cols-3">
+              <p><strong className="text-white">1.</strong> Suivez la couleur demandée si vous le pouvez.</p>
+              <p><strong className="text-white">2.</strong> Le gagnant du cinquième pli remporte la partie.</p>
+              <p><strong className="text-white">3.</strong> Somme ≤ 21 ou trois 7 : victoire immédiate.</p>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-6 flex flex-col items-center justify-center gap-2 sm:flex-row">
+          <Button variant="appOutline" onClick={onCancel} className="w-full sm:w-auto">
+            Annuler la recherche
+          </Button>
+          <span className="text-xs text-neutral-500">Aucune pénalité en cas d'annulation</span>
+        </div>
       </div>
-      <div className="flex justify-center gap-2 mb-8">
-        {[0, 0.2, 0.4].map((delay) => (
-          <motion.div
-            key={delay}
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 1, repeat: Infinity, delay }}
-            className="w-3 h-3 bg-violet-500 rounded-full"
-          />
-        ))}
-      </div>
-      <Button variant="appOutline" onClick={onCancel}>
-        Annuler la recherche
-      </Button>
     </motion.div>
   );
 }
 
-function MatchmakingStep({ active, label }: { active: boolean; label: string }) {
+function PlayerSearchCard({ name, known }: { name: string; known: boolean }) {
   return (
-    <div
-      className={`flex items-center gap-3 rounded-lg border px-3 py-2 ${
-        active
-          ? "border-violet-400/40 bg-violet-500/10 text-violet-100"
-          : "border-white/10 bg-black/25 text-slate-400"
-      }`}
-    >
-      <div className={`h-2.5 w-2.5 rounded-full ${active ? "bg-yellow-300" : "bg-slate-600"}`} />
-      <span>{label}</span>
+    <div className={`mx-auto w-full max-w-[230px] rounded-3xl border p-5 shadow-2xl shadow-black/40 backdrop-blur sm:p-7 ${known ? "border-yellow-300/45 bg-gradient-to-b from-black/70 to-yellow-950/15" : "border-violet-300/30 bg-gradient-to-b from-black/65 to-violet-950/15"}`}>
+      <div className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full border text-2xl font-black shadow-2xl sm:h-24 sm:w-24 ${known ? "border-violet-200/40 bg-gradient-to-br from-violet-400 via-purple-600 to-violet-950 text-white shadow-violet-950/50" : "border-dashed border-violet-300/45 bg-black/45 text-violet-300"}`}>
+        {known ? name.slice(0, 2).toUpperCase() : "?"}
+      </div>
+      <div className="mt-3 truncate font-bold text-white">{name}</div>
+      <div className="mt-1 text-xs text-neutral-500">{known ? "Prêt à jouer" : "Analyse en cours"}</div>
     </div>
   );
+}
+
+function SearchInfo({ icon, label, value, accent = false }: { icon: ReactNode; label: string; value: string; accent?: boolean }) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-black/30 p-3 text-left">
+      <div className={`flex items-center gap-2 text-xs ${accent ? "text-yellow-300" : "text-violet-300"}`}>{icon}{label}</div>
+      <div className={`mt-1 font-black ${accent ? "text-yellow-200" : "text-white"}`}>{value}</div>
+    </div>
+  );
+}
+
+function formatElapsed(seconds: number) {
+  const minutes = Math.floor(seconds / 60).toString().padStart(2, "0");
+  const remainder = (seconds % 60).toString().padStart(2, "0");
+  return `${minutes}:${remainder}`;
 }

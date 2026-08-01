@@ -186,8 +186,8 @@ export function GameRoom() {
     if (!canPlayCard(card)) {
       setError(
         leadSuit
-          ? `Vous devez suivre la couleur demandee: ${getSuitLabel(leadSuit)}.`
-          : "Cette carte ne peut pas etre jouee maintenant.",
+          ? `Vous devez suivre la couleur demandée : ${getSuitLabel(leadSuit)}.`
+          : "Cette carte ne peut pas être jouée maintenant.",
       );
       return;
     }
@@ -402,7 +402,7 @@ export function GameRoom() {
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.18) 0%, transparent 60%),
+              radial-gradient(circle at 50% 52%, rgba(13, 72, 53, 0.48) 0%, transparent 58%),
               radial-gradient(circle at 28% 38%, rgba(253, 224, 71, 0.10) 0%, transparent 36%),
               radial-gradient(circle at 72% 62%, rgba(168, 85, 247, 0.12) 0%, transparent 42%)
             `,
@@ -435,16 +435,21 @@ export function GameRoom() {
               Quitter
             </Button>
 
-            <div className="grid flex-1 grid-cols-2 gap-2 sm:grid-cols-4">
-              <StatusTile label="Gain potentiel" value={`${pot} credits`} tone="amber" />
+            <div className="hidden shrink-0 lg:block">
+              <div className="app-logo text-center text-xl">GARAME</div>
+              <div className="mx-auto mt-1 h-px w-24 bg-gradient-to-r from-transparent via-yellow-300/65 to-transparent" />
+            </div>
+
+            <div className="grid flex-1 grid-cols-2 gap-2 sm:grid-cols-4 lg:max-w-2xl">
+              <StatusTile label="Gain potentiel" value={`${pot} crédits`} tone="amber" />
               <StatusTile label="Score" value={`${game.myTricksWon} - ${opponentTricksWon}`} tone="slate" />
               <StatusTile label="Pli" value={`${currentRoundLabel}/5`} tone="emerald" />
-              <StatusTile label="Solde" value={`${user?.credits ?? 0} credits`} tone="slate" />
+              <StatusTile label="Solde" value={`${user?.credits ?? 0} crédits`} tone="slate" />
             </div>
 
             {isResyncing && (
               <div className="w-fit rounded-lg border border-violet-300/35 bg-violet-500/10 px-3 py-2 text-sm font-semibold text-violet-100">
-                resync
+                Synchronisation…
               </div>
             )}
           </div>
@@ -513,7 +518,7 @@ export function GameRoom() {
                   <SuitDemandBadge suit={leadSuit} />
                 ) : (
                   <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 text-xs font-semibold text-neutral-300">
-                    Aucune couleur demandee
+                    Aucune couleur demandée
                   </span>
                 )}
                 {isMyTurn && (
@@ -524,7 +529,7 @@ export function GameRoom() {
               </div>
             </div>
 
-            <div className="relative z-10 flex min-h-[220px] items-center justify-center gap-4 rounded-2xl border border-violet-300/20 bg-gradient-to-br from-[#151515]/88 via-black/70 to-violet-950/28 px-4 py-8 shadow-2xl shadow-black/40">
+            <div className="app-felt-surface app-gold-frame relative z-10 flex min-h-[240px] items-center justify-center gap-4 rounded-[2rem] px-4 py-8">
               <AnimatePresence>
                 {currentTrick.map((card, i) => (
                   <motion.div
@@ -545,7 +550,30 @@ export function GameRoom() {
               )}
             </div>
 
-            <div className="text-center mt-4">
+            <div className="mt-4 flex items-center justify-center gap-2" aria-label={`Progression : pli ${currentRoundLabel} sur 5`}>
+              {Array.from({ length: 5 }).map((_, index) => {
+                const step = index + 1;
+                const isPast = step < currentRoundLabel;
+                const isCurrent = step === currentRoundLabel;
+
+                return (
+                  <div
+                    key={step}
+                    className={`flex h-8 w-8 items-center justify-center rounded-full border text-xs font-black transition-colors ${
+                      isCurrent
+                        ? "border-violet-200 bg-violet-500 text-white shadow-lg shadow-violet-500/35"
+                        : isPast
+                          ? "border-yellow-300/60 bg-yellow-300/15 text-yellow-200"
+                          : "border-white/15 bg-black/35 text-neutral-500"
+                    }`}
+                  >
+                    {step}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="text-center mt-3">
               {result?.roundWinner && (
                 <div className="inline-flex items-center gap-2 rounded-full border border-yellow-300/40 bg-yellow-300/10 px-4 py-2 text-sm font-semibold text-yellow-100">
                   <Trophy className="h-4 w-4" />
@@ -556,14 +584,30 @@ export function GameRoom() {
           </div>
         </div>
 
-        <div className="sticky bottom-0 z-30 border-t border-white/10 bg-[#080808]/92 px-4 pb-4 pt-3 backdrop-blur-xl sm:relative sm:border-t-0 sm:bg-transparent sm:pt-0 sm:backdrop-blur-none">
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-4 flex min-h-36 justify-start gap-3 overflow-x-auto pb-2 sm:justify-center sm:overflow-visible sm:pb-0">
+        <div className="sticky bottom-0 z-30 border-t border-white/10 bg-[#080808]/94 px-4 pb-4 pt-3 backdrop-blur-xl sm:relative sm:border-t-0 sm:bg-transparent sm:pt-0 sm:backdrop-blur-none">
+          <div className="mx-auto max-w-4xl rounded-2xl border border-white/5 bg-black/20 px-3 pt-3 sm:border-0 sm:bg-transparent sm:px-0 sm:pt-0">
+            <div className="mb-3 flex items-center justify-between gap-3 text-xs font-semibold">
+              <span className={isMyTurn ? "text-violet-100" : "text-neutral-400"}>
+                {isMyTurn
+                  ? `${playableCardsCount} carte${playableCardsCount > 1 ? "s" : ""} jouable${playableCardsCount > 1 ? "s" : ""}`
+                  : `En attente de ${opponentName}`}
+              </span>
+              <span className="flex items-center gap-3 text-neutral-500">
+                <span><span className="mr-1 inline-block h-2 w-2 rounded-full bg-violet-400" />Jouable</span>
+                <span><span className="mr-1 inline-block h-2 w-2 rounded-full bg-neutral-600" />Bloquée</span>
+              </span>
+            </div>
+
+            <div className="mb-4 flex min-h-36 justify-start gap-3 overflow-x-auto pb-2 sm:justify-center sm:overflow-visible sm:pb-0" role="group" aria-label="Votre main">
               {playerHand.map((card, i) => (
-                <div
+                <button
+                  type="button"
                   key={`${card.suit}-${card.value}-${i}`}
                   onClick={() => handleCardClick(i)}
-                  className="shrink-0"
+                  disabled={!canPlayCard(card)}
+                  aria-pressed={selectedCard === i}
+                  aria-label={`${card.value} de ${getSuitLabel(card.suit)}${canPlayCard(card) ? ", jouable" : ", bloquée"}`}
+                  className="shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black disabled:cursor-not-allowed"
                 >
                   <PlayingCard
                     suit={card.suit}
@@ -572,7 +616,7 @@ export function GameRoom() {
                     isSelected={selectedCard === i}
                     isHighlighted={isMyTurn && canPlayCard(card) && selectedCard !== i}
                   />
-                </div>
+                </button>
               ))}
             </div>
 
@@ -598,7 +642,7 @@ export function GameRoom() {
                   : selectedPlayableCard
                     ? `Jouer ${selectedPlayableCard.value}${getSuitSymbol(selectedPlayableCard.suit)}`
                     : isMyTurn
-                      ? "Selectionnez une carte"
+                      ? "Sélectionnez une carte"
                       : "En attente"}
               </Button>
             </div>

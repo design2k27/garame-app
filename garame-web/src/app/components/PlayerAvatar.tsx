@@ -35,7 +35,7 @@ export function PlayerAvatar({
         <div
           className={`
           ${currentSize.container}
-          bg-gradient-to-br from-amber-500 to-amber-600
+          bg-gradient-to-br from-violet-500 to-purple-700
           rounded-full flex items-center justify-center
           text-white font-bold ${currentSize.text}
           shadow-lg

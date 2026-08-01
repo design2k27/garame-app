@@ -107,9 +107,9 @@ export function PlayingCard({
       onClick={isPlayable ? onClick : undefined}
       className={`
         ${currentSize.container}
-        bg-white rounded-lg shadow-2xl relative overflow-hidden
+        bg-[#fffdf8] rounded-xl shadow-2xl relative overflow-hidden
         border-2
-        ${isPlayable ? "cursor-pointer border-gray-300 hover:shadow-yellow-400/45 hover:border-yellow-300 transition-all" : "cursor-not-allowed border-slate-400 opacity-45 grayscale saturate-50"}
+        ${isPlayable ? "cursor-pointer border-[#e4dccb] hover:shadow-yellow-400/45 hover:border-yellow-300 transition-all" : "cursor-not-allowed border-slate-500 opacity-40 grayscale saturate-50"}
         ${isHighlighted ? "ring-2 ring-violet-300/80 shadow-violet-400/40" : ""}
         ${isSelected ? "ring-4 ring-yellow-300 shadow-yellow-400/45 -translate-y-3" : ""}
         ${className}
@@ -123,7 +123,8 @@ export function PlayingCard({
       }}
     >
       {/* Premium card background texture */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-gray-50 to-white rounded-lg opacity-60" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,white,transparent_42%),linear-gradient(145deg,#fffefb,#f2eee5)] rounded-xl opacity-90" />
+      <div className="absolute inset-1 rounded-lg border border-black/[0.035]" />
 
       {/* Top left corner */}
       <div className="absolute top-2 left-2 flex flex-col items-center gap-0 z-10">
@@ -172,7 +173,7 @@ export function PlayingCard({
       {!isPlayable && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/20">
           <div className="rounded-full border border-slate-300/80 bg-white/85 px-2 py-1 text-[10px] font-bold uppercase text-slate-700 shadow">
-            Bloquee
+            Bloquée
           </div>
         </div>
       )}

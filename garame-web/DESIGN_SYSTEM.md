@@ -1,7 +1,7 @@
 # GARAME - Design System Documentation
 
 ## 🎨 Vision
-Application de jeu de cartes premium dark-mode inspirée du poker online, eSport et fintech.
+Application de jeu de cartes premium dark-mode inspirée de l'eSport et de la fintech. Le violet porte l'action ; l'or signale la valeur, le rang et les récompenses.
 
 ---
 
@@ -35,20 +35,23 @@ Application de jeu de cartes premium dark-mode inspirée du poker online, eSport
 --surface-primary: bg-slate-800/50 backdrop-blur
 --surface-secondary: bg-slate-900/50
 --border-primary: border-slate-700
---border-accent: border-amber-500
+--border-accent: border-violet-400/40
 ```
 
-### Accent Colors
+### Couleurs d'accent
 ```css
---amber-primary: from-amber-500 to-amber-600
---amber-glow: shadow-amber-500/50
+--violet-primary: from-violet-500 to-purple-700 /* actions principales */
+--violet-glow: shadow-violet-500/35
+--gold-value: yellow-300 /* crédits, rang, gains et sélection */
 --green-felt: from-green-900/30 via-green-800/20 to-green-900/30
 ```
 
 ### Semantic Colors
 ```css
 --success: emerald-500 (Victoire, Under21)
---warning: amber-500 (Actions principales)
+--action: violet-500 (Actions principales, tour du joueur)
+--value: yellow-300 (Crédits, rang, gains, sélection)
+--warning: amber-500 (Attention et temps faible uniquement)
 --danger: red-500 (Défaite, actions destructives)
 --special: purple-500 (Three 7)
 --legendary: amber + red gradient (Korat)
@@ -121,7 +124,9 @@ gap-6 /* 24px */
 **États:**
 - `isPlayable`: Cursor pointer, hover lift, couleurs vives
 - `!isPlayable`: Opacity 30%, grayscale, disabled cursor
-- `isSelected`: Ring amber-400, translate-y-3, shadow glow
+- `isSelected`: Ring yellow-300, translate-y-3, shadow glow
+- `isHighlighted`: Ring violet-300, animation légère (carte jouable)
+- `!isPlayable`: Carte assombrie avec libellé « Bloquée »
 - `faceDown`: Gradient red, pattern dos de carte
 
 **Symboles:**
@@ -132,9 +137,9 @@ gap-6 /* 24px */
 
 ### Button
 **Variants:**
-- `primary`: Amber gradient, white text
+- `primary`: Violet gradient, white text
 - `secondary`: Slate-700, white text
-- `outline`: Border amber, amber text, hover fill
+- `outline`: Border violet, violet text, hover fill
 - `danger`: Red-600, white text
 
 **Sizes:**
@@ -404,13 +409,13 @@ navigate("/dashboard");
 ## 🎨 Brand Assets
 
 ### Logo Text
-"GARAME" - text-7xl, gradient amber
+"GARAME" - text-7xl, gradient violet vers or
 
 ### Tagline
 "Le jeu de cartes compétitif premium"
 
-### Color Signature
-Amber (#F59E0B) sur Dark Slate (#0F172A)
+### Signature couleur
+Violet (#8B2CF5) pour l'action et or doux (#FDE047) pour la valeur, sur noir graphite (#080808)
 
 ---
 

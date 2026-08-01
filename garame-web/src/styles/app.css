@@ -27,6 +27,9 @@
   --app-value-soft: rgba(253, 224, 71, 0.12);
   --app-danger: #fb7185;
   --app-danger-soft: rgba(244, 63, 94, 0.1);
+  --app-gold: #d6b66f;
+  --app-gold-soft: rgba(214, 182, 111, 0.18);
+  --app-felt: #0d2b22;
 }
 
 @layer components {
@@ -35,12 +38,48 @@
     background:
       radial-gradient(circle at top left, rgba(147, 51, 234, 0.22), transparent 32%),
       linear-gradient(135deg, var(--app-bg) 0%, var(--app-bg-raised) 52%, #171717 100%);
+    background-attachment: fixed;
   }
 
   .app-header {
     @apply border-b backdrop-blur-xl;
     border-color: var(--app-border);
     background: rgba(11, 11, 12, 0.85);
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.3);
+  }
+
+  .app-logo {
+    @apply font-black uppercase tracking-[0.22em];
+    font-family: Georgia, "Times New Roman", serif;
+    color: #f8f5ee;
+    text-shadow: 0 0 28px rgba(168, 85, 247, 0.22);
+  }
+
+  .app-eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.2em];
+    color: #c4b5fd;
+  }
+
+  .app-gold-frame {
+    border: 1px solid rgba(214, 182, 111, 0.34);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+      0 24px 70px rgba(0, 0, 0, 0.36);
+  }
+
+  .app-felt-surface {
+    background:
+      radial-gradient(circle at 50% 38%, rgba(34, 197, 94, 0.12), transparent 42%),
+      repeating-linear-gradient(35deg, transparent 0 3px, rgba(255, 255, 255, 0.012) 3px 4px),
+      linear-gradient(145deg, #12382c, #0b211b 62%, #071512);
+    box-shadow:
+      inset 0 0 80px rgba(0, 0, 0, 0.58),
+      0 30px 80px rgba(0, 0, 0, 0.4);
+  }
+
+  .app-orb {
+    @apply absolute rounded-full blur-3xl pointer-events-none;
+    background: rgba(124, 58, 237, 0.2);
   }
 
   .app-container {
@@ -49,15 +88,15 @@
 
   .app-card {
     @apply rounded-2xl border shadow-2xl backdrop-blur;
-    background: rgba(21, 21, 21, 0.88);
-    border-color: var(--app-border);
+    background: linear-gradient(145deg, rgba(24, 22, 26, 0.94), rgba(10, 10, 11, 0.94));
+    border-color: rgba(214, 182, 111, 0.24);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
   }
 
   .app-panel {
     @apply rounded-xl border backdrop-blur;
-    background: rgba(21, 21, 21, 0.88);
-    border-color: var(--app-border);
+    background: linear-gradient(145deg, rgba(19, 19, 21, 0.94), rgba(9, 9, 10, 0.94));
+    border-color: rgba(214, 182, 111, 0.2);
   }
 
   .app-subpanel {

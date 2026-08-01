@@ -1,0 +1,119 @@
+name: garame
+
+services:
+  database:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-garame}
+      POSTGRES_USER: ${POSTGRES_USER:-garame}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-garame}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - database_garame_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  mercure:
+    image: dunglas/mercure
+    restart: unless-stopped
+    environment:
+      SERVER_NAME: ":80"
+      MERCURE_PUBLISHER_JWT_KEY: ${MERCURE_JWT_SECRET:-garame-mercure-dev-secret}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${MERCURE_JWT_SECRET:-garame-mercure-dev-secret}
+      MERCURE_EXTRA_DIRECTIVES: |
+        anonymous
+        cors_origins http://localhost:${FRONTEND_PORT:-3000} http://127.0.0.1:${FRONTEND_PORT:-3000}
+    command: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile
+    ports:
+      - "${MERCURE_PORT:-3001}:80"
+    volumes:
+      - mercure_garame_data:/data
+      - mercure_config:/config
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_SMTP_PORT:-1025}:1025"
+      - "${MAILPIT_UI_PORT:-8025}:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "1"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+
+  backend:
+    build:
+      context: ./garame-api
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: dev
+        APP_DEBUG: "1"
+    restart: unless-stopped
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: "1"
+      APP_SECRET: ${APP_SECRET:-garame-local-development-secret}
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-garame}:${POSTGRES_PASSWORD:-garame}@database:5432/${POSTGRES_DB:-garame}?serverVersion=16&charset=utf8"
+      MESSENGER_TRANSPORT_DSN: "doctrine://default?auto_setup=0"
+      MAILER_DSN: smtp://mailpit:1025
+      JWT_SECRET_KEY: /app/config/jwt/private.pem
+      JWT_PUBLIC_KEY: /app/config/jwt/public.pem
+      # Correspond aux clés de développement déjà présentes dans garame-api/config/jwt.
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE:-31ddd3ff7d7dfe1745a4de5beb336c4761977a043ce27e6ad87ef2b70fc958e2}
+      MERCURE_URL: http://mercure/.well-known/mercure
+      MERCURE_PUBLIC_URL: http://localhost:${MERCURE_PORT:-3001}/.well-known/mercure
+      MERCURE_JWT_SECRET: ${MERCURE_JWT_SECRET:-garame-mercure-dev-secret}
+      CORS_ALLOW_ORIGIN: "^https?://(localhost|127\\.0\\.0\\.1)(:[0-9]+)?$"
+      RUN_MIGRATIONS: "1"
+      CREATE_DATABASE_IF_MISSING: "0"
+      WARMUP_CACHE: "1"
+    ports:
+      - "${BACKEND_PORT:-8080}:80"
+    depends_on:
+      database:
+        condition: service_healthy
+      mercure:
+        condition: service_started
+      mailpit:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 45s
+
+  frontend:
+    build:
+      context: ./garame-web
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:${BACKEND_PORT:-8080}
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  database_garame_data:
+  mercure_garame_data:
+  mercure_config:

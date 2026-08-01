@@ -18,9 +18,9 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variants = {
-    primary: "bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700",
+    primary: "bg-gradient-to-r from-violet-500 to-purple-700 text-white shadow-lg shadow-violet-950/40 hover:from-violet-400 hover:to-purple-600",
     secondary: "bg-slate-700 text-white hover:bg-slate-600",
-    outline: "border-2 border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white",
+    outline: "border-2 border-violet-400 text-violet-200 hover:bg-violet-500 hover:text-white",
     danger: "bg-red-600 text-white hover:bg-red-700",
     app: "bg-gradient-to-r from-violet-500 to-purple-700 text-white shadow-lg shadow-violet-950/40 ring-1 ring-violet-300/30 hover:from-violet-400 hover:to-purple-600",
     appSecondary: "border border-white/10 bg-white text-violet-900 shadow-lg shadow-black/20 hover:bg-violet-50",
