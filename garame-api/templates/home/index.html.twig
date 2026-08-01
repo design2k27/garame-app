@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Garame API{% endblock %}
+
+{% block body %}
+    <main class="site-shell">
+        <div class="site-page site-layout-home">
+            <section class="site-panel site-panel-grid">
+                <article class="site-card site-card-hero">
+                    <p class="site-kicker">Garame Backend</p>
+                    <h1 class="site-title">L'API tourne correctement.</h1>
+                    <p class="site-lead">
+                        Le serveur backend est en ligne et pret a servir le jeu, l'authentification,
+                        le matchmaking et les mises a jour de partie sous <code>/api</code>.
+                    </p>
+
+                    <div class="site-badge-row">
+                        <div class="site-badge">
+                            <span class="site-badge-dot"></span>
+                            Service en cours d'execution
+                        </div>
+                        <div class="site-badge site-badge-muted">Base path: /api</div>
+                        <div class="site-badge site-badge-muted">{{ healthyServices }}/{{ totalServices }} dependances OK</div>
+                    </div>
+
+                    <div class="site-link-row">
+                        <a class="site-link-pill site-link-pill-strong" href="{{ path('app_rules') }}">Voir le reglement du jeu</a>
+                        <a class="site-link-pill site-link-pill-strong" href="{{ path('app_api_docs') }}">Lire la documentation API</a>
+                    </div>
+
+                    <div class="site-service-grid">
+                        {% for service in services %}
+                            <section class="site-service-card">
+                                <div class="site-service-head">
+                                    <strong>{{ service.name }}</strong>
+                                    <span class="site-status-pill site-status-pill-{{ service.state }}">{{ service.label }}</span>
+                                </div>
+                                <p>{{ service.detail }}</p>
+                                {% if service.meta %}
+                                    <div class="site-service-meta">{{ service.meta }}</div>
+                                {% endif %}
+                            </section>
+                        {% endfor %}
+                    </div>
+
+                    <div class="site-cards" aria-hidden="true">
+                        <div class="site-playing-card site-playing-card-a">7♥</div>
+                        <div class="site-playing-card site-playing-card-b">3♣</div>
+                    </div>
+                </article>
+
+                <aside class="site-sidebar">
+                    <h2>Point d'entree navigateur</h2>
+
+                    <div class="site-metric-list">
+                        <div class="site-metric">
+                            <strong>Authentification</strong>
+                            <span><code>POST /api/auth/login</code> et <code>/register</code></span>
+                        </div>
+                        <div class="site-metric">
+                            <strong>Jeu</strong>
+                            <span><code>/api/games</code> pour creer, rejoindre, jouer et consulter</span>
+                        </div>
+                        <div class="site-metric">
+                            <strong>Temps reel</strong>
+                            <span>Les parties publient aussi des evenements Mercure par topic de jeu</span>
+                        </div>
+                        <div class="site-metric">
+                            <strong>Sante des services</strong>
+                            <span>La page verifie aussi la base SQL, Mercure et le transport async au chargement</span>
+                        </div>
+                    </div>
+
+                    <p class="site-footer-note">
+                        Cette page confirme simplement que l'application web repond. Le front peut maintenant consommer l'API.
+                    </p>
+                </aside>
+            </section>
+        </div>
+    </main>
+{% endblock %}

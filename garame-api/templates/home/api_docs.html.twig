@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Documentation API Garame{% endblock %}
+
+{% block body %}
+    <main class="site-shell">
+        <div class="site-page site-stack">
+            <section class="site-hero">
+                <nav class="site-nav">
+                    <a href="{{ path('app_home') }}">Accueil</a>
+                    <a href="{{ path('app_rules') }}">Reglement du jeu</a>
+                    <a href="/api/docs">OpenAPI /api/docs</a>
+                </nav>
+                <h1 class="site-title">Documentation complete de l'API</h1>
+                <p class="site-lead">
+                    Cette page expose la documentation HTTP du projet directement dans l'interface web:
+                    endpoints, contrats de reponse, erreurs applicatives, temps reel et strategie de resynchronisation.
+                </p>
+            </section>
+
+            <section class="site-docs-grid">
+                <div class="site-stack">
+                    <article class="site-card">
+                        <h2>Contrat HTTP principal</h2>
+                        <p class="site-copy">
+                            Le contenu ci-dessous reprend la documentation complete declaree dans <code>docs/API.md</code>.
+                        </p>
+                        <pre class="site-markdown">{{ apiDoc }}</pre>
+                    </article>
+
+                    <article class="site-card">
+                        <h2>Guide temps reel</h2>
+                        <p class="site-copy">
+                            Ce second bloc reprend le contrat recommande cote client pour Mercure, <code>sync</code>,
+                            <code>poll</code> et <code>ack</code>.
+                        </p>
+                        <pre class="site-markdown">{{ realtimeDoc }}</pre>
+                    </article>
+                </div>
+
+                <aside class="site-sidebar">
+                    <h2>Acces rapide</h2>
+                    <ul>
+                        <li>Base API: <code>/api</code></li>
+                        <li>Healthcheck public: <code>/health</code></li>
+                        <li>OpenAPI: <code>/api/docs</code></li>
+                        <li>JWT public: <code>POST /api/auth/register</code> et <code>POST /api/auth/login</code></li>
+                        <li>Toutes les autres routes <code>/api</code> demandent un bearer token.</li>
+                    </ul>
+                    <p>
+                        La route web actuelle sert de documentation lisible cote navigateur. L'endpoint
+                        <a href="/api/docs">/api/docs</a> reste disponible pour la specification OpenAPI generee.
+                    </p>
+                </aside>
+            </section>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,159 @@
+/*
+  Garame app theme
+  Scope: pages and product surfaces outside the in-game table.
+
+  Visual direction:
+  - deep near-black backgrounds
+  - compact dark surfaces with subtle borders
+  - violet as the primary action/accent
+  - yellow/gold for money, gains and important values
+  - rose/red only for errors and losses
+*/
+
+:root {
+  --app-bg: #080808;
+  --app-bg-raised: #111111;
+  --app-surface: #151515;
+  --app-surface-muted: #101010;
+  --app-border: rgba(255, 255, 255, 0.1);
+  --app-border-strong: rgba(196, 181, 253, 0.28);
+  --app-text: #ffffff;
+  --app-text-muted: #a1a1aa;
+  --app-text-soft: #d4d4d8;
+  --app-accent: #8b2cf5;
+  --app-accent-strong: #a855f7;
+  --app-accent-soft: rgba(139, 44, 245, 0.14);
+  --app-value: #fde047;
+  --app-value-soft: rgba(253, 224, 71, 0.12);
+  --app-danger: #fb7185;
+  --app-danger-soft: rgba(244, 63, 94, 0.1);
+}
+
+@layer components {
+  .app-page {
+    @apply min-h-screen text-white;
+    background:
+      radial-gradient(circle at top left, rgba(147, 51, 234, 0.22), transparent 32%),
+      linear-gradient(135deg, var(--app-bg) 0%, var(--app-bg-raised) 52%, #171717 100%);
+  }
+
+  .app-header {
+    @apply border-b backdrop-blur-xl;
+    border-color: var(--app-border);
+    background: rgba(11, 11, 12, 0.85);
+  }
+
+  .app-container {
+    @apply mx-auto max-w-7xl px-4 py-8;
+  }
+
+  .app-card {
+    @apply rounded-2xl border shadow-2xl backdrop-blur;
+    background: rgba(21, 21, 21, 0.88);
+    border-color: var(--app-border);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+  }
+
+  .app-panel {
+    @apply rounded-xl border backdrop-blur;
+    background: rgba(21, 21, 21, 0.88);
+    border-color: var(--app-border);
+  }
+
+  .app-subpanel {
+    @apply rounded-lg border;
+    background: rgba(0, 0, 0, 0.28);
+    border-color: var(--app-border);
+  }
+
+  .app-brand-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(90deg, #c4b5fd, #e879f9, #fde047);
+  }
+
+  .app-brand-underline {
+    @apply mt-0.5 h-1 w-12 rounded-full;
+    background-image: linear-gradient(90deg, var(--app-accent-strong), var(--app-value));
+  }
+
+  .app-button-primary {
+    @apply rounded-lg px-4 py-2 font-bold text-white transition-colors;
+    background: linear-gradient(90deg, #a855f7, #6d28d9);
+    border: 1px solid rgba(216, 180, 254, 0.38);
+    box-shadow: 0 16px 36px rgba(88, 28, 135, 0.42);
+  }
+
+  .app-button-primary:hover {
+    filter: brightness(1.08);
+  }
+
+  .app-button-ghost {
+    @apply rounded-lg border px-4 py-2 font-semibold transition-colors;
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--app-border);
+    color: var(--app-text);
+  }
+
+  .app-action-text {
+    @apply font-semibold underline-offset-4 transition-colors;
+    color: #d8b4fe;
+  }
+
+  .app-action-text:hover {
+    color: var(--app-value);
+  }
+
+  .app-button-ghost:hover {
+    background: rgba(139, 44, 245, 0.12);
+    border-color: var(--app-border-strong);
+  }
+
+  .app-input {
+    @apply w-full rounded-lg px-10 py-3 text-white outline-none;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--app-border);
+  }
+
+  .app-input::placeholder {
+    color: #71717a;
+  }
+
+  .app-input:focus {
+    border-color: var(--app-accent-strong);
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.35);
+  }
+
+  .app-chip {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-semibold;
+    background: var(--app-accent-soft);
+    border-color: var(--app-border-strong);
+    color: #ddd6fe;
+  }
+
+  .app-value {
+    color: var(--app-value);
+  }
+
+  .app-muted {
+    color: var(--app-text-muted);
+  }
+
+  .app-danger-box {
+    @apply rounded-lg border px-4 py-3 text-sm;
+    background: var(--app-danger-soft);
+    border-color: rgba(251, 113, 133, 0.4);
+    color: #fecdd3;
+  }
+
+  .app-empty-state {
+    @apply rounded-xl border border-dashed p-6 text-center;
+    background: rgba(139, 44, 245, 0.05);
+    border-color: rgba(196, 181, 253, 0.2);
+  }
+
+  .app-stat-card {
+    @apply rounded-xl border p-6 backdrop-blur;
+    background: rgba(21, 21, 21, 0.78);
+    border-color: var(--app-border);
+  }
+}

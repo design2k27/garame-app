@@ -1,0 +1,91 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: garame-api:prod-local
+    ports:
+      - "8080:80"
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      APP_SECRET: local-prod-secret-change-me
+      DEFAULT_URI: http://localhost:8080
+      DATABASE_URL: postgresql://garame:secret@database:5432/garame?serverVersion=18&charset=utf8
+      JWT_SECRET_KEY: /app/config/jwt/private.pem
+      JWT_PUBLIC_KEY: /app/config/jwt/public.pem
+      JWT_PASSPHRASE: ""
+      MERCURE_URL: http://mercure/.well-known/mercure
+      MERCURE_PUBLIC_URL: http://localhost:3000/.well-known/mercure
+      MERCURE_JWT_SECRET: GarameSecretMercure2024!
+      RUN_MIGRATIONS: 1
+      DB_WAIT_RETRIES: 30
+      DB_WAIT_DELAY: 2
+    depends_on:
+      database:
+        condition: service_healthy
+      mercure:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - garame
+
+  database:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: garame
+      POSTGRES_USER: garame
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - database_data_prod_local:/var/lib/postgresql/data:rw
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "garame", "-U", "garame"]
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - garame
+
+  mercure:
+    image: dunglas/mercure
+    restart: unless-stopped
+    environment:
+      SERVER_NAME: ':80'
+      MERCURE_PUBLISHER_JWT_KEY: GarameSecretMercure2024!
+      MERCURE_SUBSCRIBER_JWT_KEY: GarameSecretMercure2024!
+      MERCURE_EXTRA_DIRECTIVES: |
+        cors_origins http://localhost:5173 http://localhost:8080
+    command: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile
+    ports:
+      - "3000:80"
+    volumes:
+      - mercure_data:/data
+      - mercure_config:/config
+    healthcheck:
+      # wget est présent par défaut sur l'image Mercure (Alpine)
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost/healthz || exit 1" ]
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+      interval: 10s
+    networks:
+      - garame
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - garame
+
+networks:
+  garame:
+    driver: bridge
+
+volumes:
+  database_data_prod_local:
+  mercure_data:
+  mercure_config:

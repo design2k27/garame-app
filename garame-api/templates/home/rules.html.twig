@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reglement Garame{% endblock %}
+
+{% block body %}
+    <main class="site-shell">
+        <div class="site-page site-stack">
+            <section class="site-hero">
+                <nav class="site-nav">
+                    <a href="{{ path('app_home') }}">Accueil</a>
+                    <a href="{{ path('app_api_docs') }}">Documentation API</a>
+                </nav>
+                <h1 class="site-title">Reglement complet du Garame</h1>
+                <p class="site-lead">
+                    Cette page resume les regles du jeu telles qu'elles sont actuellement implementees dans l'API:
+                    composition du paquet, distribution, victoires immediates, deroulement des plis, condition Korat
+                    et systeme de credits.
+                </p>
+                <div class="site-summary">
+                    <div class="site-summary-card">
+                        <strong>Format</strong>
+                        1 contre 1, cinq cartes par joueur, cinq plis maximum.
+                    </div>
+                    <div class="site-summary-card">
+                        <strong>Paquet</strong>
+                        23 cartes: valeurs <code>3</code> a <code>8</code>, couleurs <code>H D C S</code>, sans <code>8S</code>.
+                    </div>
+                    <div class="site-summary-card">
+                        <strong>Victoire rapide</strong>
+                        <code>three_seven</code> prioritaire sur <code>moins_21</code>.
+                    </div>
+                    <div class="site-summary-card">
+                        <strong>Classement</strong>
+                        Base de 10 credits, doubles en cas de <code>korat</code>.
+                    </div>
+                </div>
+                <div class="site-link-row">
+                    <span class="site-chip">Version alignee sur le moteur de jeu actuel</span>
+                </div>
+            </section>
+
+            <section class="site-content-grid">
+                <article class="site-card">
+                    <h2>1. Paquet et distribution</h2>
+                    <ul class="site-list">
+                        <li>Le jeu utilise 23 cartes.</li>
+                        <li>Les valeurs autorisees sont <code>3</code>, <code>4</code>, <code>5</code>, <code>6</code>, <code>7</code> et <code>8</code>.</li>
+                        <li>Les couleurs autorisees sont <code>H</code>, <code>D</code>, <code>C</code> et <code>S</code>.</li>
+                        <li>La carte <code>8S</code> est retiree du paquet.</li>
+                        <li>Chaque joueur recoit 5 cartes.</li>
+                        <li>Les 3 cartes restantes sont ignorees.</li>
+                        <li>Les mains sont triees par valeur croissante pour l'affichage.</li>
+                    </ul>
+                </article>
+
+                <article class="site-card">
+                    <h2>2. Debut de partie</h2>
+                    <ul class="site-list">
+                        <li>Quand le second joueur rejoint la partie, les cartes sont distribuees.</li>
+                        <li>Le joueur en position 1 devient le meneur initial.</li>
+                        <li>Le moteur verifie d'abord les victoires immediates.</li>
+                        <li>Si aucune victoire immediate n'est detectee, le pli numero 1 est cree.</li>
+                    </ul>
+                </article>
+
+                <article class="site-card">
+                    <h2>3. Victoires immediates</h2>
+                    <h3><code>three_seven</code></h3>
+                    <ul class="site-list">
+                        <li>Un joueur gagne immediatement s'il a exactement 3 cartes de valeur <code>7</code>.</li>
+                        <li>Cette condition est prioritaire sur toutes les autres.</li>
+                        <li>Si les deux joueurs l'ont, le joueur 1 gagne.</li>
+                    </ul>
+                    <h3><code>moins_21</code></h3>
+                    <ul class="site-list">
+                        <li>Un joueur gagne immediatement si la somme de ses 5 cartes est inferieure ou egale a <code>21</code>.</li>
+                        <li>Si les deux joueurs sont a <code>21</code> ou moins, la somme la plus basse gagne.</li>
+                        <li>En cas d'egalite sur cette somme, le joueur 1 gagne.</li>
+                    </ul>
+                </article>
+
+                <article class="site-card">
+                    <h2>4. Deroulement d'un pli</h2>
+                    <ul class="site-list">
+                        <li>Le meneur joue en premier.</li>
+                        <li>Le repondant joue en second.</li>
+                        <li>Un joueur ne peut jouer qu'une carte appartenant au paquet Garame.</li>
+                        <li>Un joueur doit posseder la carte qu'il tente de jouer.</li>
+                        <li>Le tour est strictement verifie par le serveur.</li>
+                    </ul>
+                </article>
+
+                <article class="site-card">
+                    <h2>5. Obligation de suivre</h2>
+                    <ul class="site-list">
+                        <li>Le second joueur doit suivre la couleur demandee s'il a au moins une carte de cette couleur.</li>
+                        <li>Cette obligation saute lorsqu'il ne lui reste qu'une seule carte en main.</li>
+                        <li>S'il ne suit pas alors qu'il le pouvait, le coup est refuse.</li>
+                    </ul>
+                </article>
+
+                <article class="site-card">
+                    <h2>6. Gagnant d'un pli</h2>
+                    <ul class="site-list">
+                        <li>Si le repondant ne suit pas la couleur demandee, le meneur gagne le pli.</li>
+                        <li>Si les deux cartes sont dans la couleur demandee, la valeur la plus haute gagne.</li>
+                        <li>En cas d'egalite de valeur, le meneur gagne car la comparaison est favorable a la premiere carte.</li>
+                        <li>Le gagnant du pli devient meneur du pli suivant.</li>
+                    </ul>
+                </article>
+
+                <article class="site-card">
+                    <h2>7. Fin de partie</h2>
+                    <ul class="site-list">
+                        <li>La partie peut se terminer immediatement apres la distribution via <code>three_seven</code> ou <code>moins_21</code>.</li>
+                        <li>Sinon, la partie se termine apres le 5e pli.</li>
+                        <li>Le gagnant du 5e pli gagne la partie.</li>
+                    </ul>
+                </article>
+
+                <article class="site-card">
+                    <h2>8. Regle Korat</h2>
+                    <ul class="site-list">
+                        <li>La condition <code>korat</code> est verifiee sur le 5e pli.</li>
+                        <li>Le meneur doit jouer un <code>3</code>.</li>
+                        <li>Le meneur doit remporter ce dernier pli.</li>
+                        <li>Dans l'implementation actuelle, ces deux conditions suffisent a declencher <code>korat</code>.</li>
+                        <li>La recompense de classement est alors doublee.</li>
+                    </ul>
+                </article>
+
+                <article class="site-card">
+                    <h2>9. Credits et resultats</h2>
+                    <ul class="site-list">
+                        <li>Une victoire <code>match_simple</code> rapporte <code>+10</code> credits.</li>
+                        <li>Une defaite <code>match_simple</code> retire <code>-10</code> credits.</li>
+                        <li>Une victoire <code>korat</code> rapporte <code>+20</code> credits.</li>
+                        <li>Une defaite <code>korat</code> retire <code>-20</code> credits.</li>
+                        <li>Le gagnant incremente <code>gamesWon</code> et les deux joueurs incrementent <code>gamesPlayed</code>.</li>
+                    </ul>
+                </article>
+            </section>
+
+            <section class="site-card site-card-spaced">
+                <h2>10. Regles d'integrite appliquees par l'API</h2>
+                <ul class="site-list">
+                    <li>Le serveur refuse les cartes hors paquet.</li>
+                    <li>Le serveur refuse les coups joues hors tour.</li>
+                    <li>Le serveur refuse un coup si le client est desynchronise via <code>clientStateVersion</code>.</li>
+                    <li>Le serveur peut forcer une resynchronisation complete via <code>sync</code> ou <code>poll</code>.</li>
+                </ul>
+                <p class="site-copy">
+                    Pour les details d'utilisation cote client et l'ensemble des endpoints, consulter aussi la
+                    <a class="site-link-pill" href="{{ path('app_api_docs') }}">documentation API web</a>.
+                </p>
+            </section>
+        </div>
+    </main>
+{% endblock %}

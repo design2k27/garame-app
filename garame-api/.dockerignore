@@ -1,0 +1,45 @@
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+.idea/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+.git
+.gitignore
+.idea
+.phpunit.cache
+.phpunit.result.cache
+docker/coolify.env.local
+docker/*.log
+tests
+var
+vendor
+node_modules
+public/assets
+public/bundles
+config/jwt/*.pem
+.env.local
+.env.*.local
+error.txt
+README.md
+AGENTS.md
+
+###< phpunit/phpunit ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
+
+###> lexik/jwt-authentication-bundle ###
+#/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

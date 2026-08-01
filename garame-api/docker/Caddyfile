@@ -1,0 +1,19 @@
+{
+    frankenphp
+    auto_https off
+    admin off
+}
+
+{$SERVER_NAME::80} {
+    root * /app/public
+
+    encode zstd gzip
+
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        X-Frame-Options SAMEORIGIN
+    }
+
+    php_server
+}
