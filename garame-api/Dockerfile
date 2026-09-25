@@ -62,8 +62,7 @@ RUN apk add --no-cache postgresql-client icu-data-full openssl \
     && install-php-extensions \
         pdo_pgsql \
         intl \
-        zip \
-        apcu
+        zip
 
 RUN if [ "$APP_ENV" = "dev" ] || [ "$APP_DEBUG" = "1" ]; then \
         mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"; \
