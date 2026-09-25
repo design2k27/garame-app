@@ -88,5 +88,9 @@ USER www-data
 EXPOSE 80
 EXPOSE 443
 
+# Check Symfony over HTTP; the Caddy admin endpoint is disabled.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 \
+    CMD curl -fsS --max-time 4 http://127.0.0.1:80/health || exit 1
+
 ENTRYPOINT ["/usr/local/bin/app-entrypoint"]
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
